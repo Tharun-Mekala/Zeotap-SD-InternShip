@@ -1,0 +1,15 @@
+package com.zeotap.main.entity;
+
+import jakarta.persistence.*;
+
+@Entity
+public class RuleEngine {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@Column(nullable = false)
+    private String rule;
+	
+	
+}

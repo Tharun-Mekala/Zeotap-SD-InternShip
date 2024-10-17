@@ -1,0 +1,25 @@
+package com.zeotap.main.service.Impl;
+
+import org.springframework.stereotype.Service;
+
+import com.zeotap.main.entity.Node;
+import com.zeotap.main.repository.NodeRepository;
+import com.zeotap.main.service.NodeService;
+
+@Service
+public class NodeServiceImpl implements NodeService{
+
+	private NodeRepository nodeRepository;
+	
+	
+	public NodeServiceImpl(NodeRepository nodeRepository) {
+		super();
+		this.nodeRepository = nodeRepository;
+	}
+	
+	@Override
+	public Node saveNode(Node node) {
+		return nodeRepository.save(node);
+	}
+	
+}

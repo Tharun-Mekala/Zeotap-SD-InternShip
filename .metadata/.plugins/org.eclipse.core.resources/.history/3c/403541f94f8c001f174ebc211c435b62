@@ -1,0 +1,54 @@
+package com.zeotap.main.models;
+
+public class Node {
+	
+	// "operator" for AND/OR, "operand" for conditions
+    private String type;  
+    private Node left;
+    private Node right;
+    // Stores the condition or operator value (e.g., "age > 30", "AND")
+    private String value; 
+
+    // Constructor for operand nodes (leaf nodes, i.e., conditions)
+    public Node(String type, String value) {
+        this.type = type;
+        this.value = value;
+        this.left = null;
+        this.right = null;
+    }
+    
+    //Getter and Setter
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Node getLeft() {
+		return left;
+	}
+
+	public void setLeft(Node left) {
+		this.left = left;
+	}
+
+	public Node getRight() {
+		return right;
+	}
+
+	public void setRight(Node right) {
+		this.right = right;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+    
+    
+}

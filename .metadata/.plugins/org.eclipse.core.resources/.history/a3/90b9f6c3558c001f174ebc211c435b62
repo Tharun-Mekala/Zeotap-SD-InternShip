@@ -1,0 +1,47 @@
+package com.zeotap.main.controller;
+
+import java.util.*;
+import java.util.StringTokenizer;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.zeotap.main.entity.Node;
+import com.zeotap.main.models.Rule;
+import com.zeotap.main.service.NodeService;
+import com.zeotap.main.service.RuleEngineService;
+
+@Controller
+public class RuleEngineController {
+	
+	private RuleEngineService ruleEngineService;
+	private NodeService nodeService;
+	
+	public RuleEngineController(RuleEngineService ruleEngineService, NodeService nodeService) {
+		super();
+		this.ruleEngineService = ruleEngineService;
+		this.nodeService = nodeService;
+	}
+	
+	@PostMapping("rule_engine/create_rule")
+	public ResponseEntity<Node> create_rule(@RequestParam String rule)
+	{
+		return ResponseEntity.ok(null);
+	}
+	@PostMapping("rule_engine/combine_rules")
+	public ResponseEntity<Node> combine_rule()
+	{
+		return ResponseEntity.ok(null);
+	}
+	
+	@GetMapping("rule_engine/evaluate_rule")
+	public ResponseEntity<Boolean> evaluate_rule(@RequestBody Rule data)
+	{
+		return ResponseEntity.ok(true);
+	}
+}

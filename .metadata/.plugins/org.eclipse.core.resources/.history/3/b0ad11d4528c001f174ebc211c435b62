@@ -1,0 +1,23 @@
+package com.zeotap.main.service.Impl;
+
+import org.springframework.stereotype.Service;
+
+import com.zeotap.main.entity.RuleEngine;
+import com.zeotap.main.repository.RuleEngineRepository;
+
+@Service
+public class RuleEngineServiceImpl  implements RuleEngineService{
+	private RuleEngineRepository ruleEngineRepository;
+	
+	
+	public RuleEngineServiceImpl(RuleEngineRepository ruleEngineRepository) {
+		super();
+		this.ruleEngineRepository = ruleEngineRepository;
+	}
+
+	@Override
+	public RuleEngine saveRuleEngine(RuleEngine re) {
+		return null;
+	}
+	
+}

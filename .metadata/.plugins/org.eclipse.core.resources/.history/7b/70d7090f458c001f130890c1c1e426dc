@@ -1,0 +1,16 @@
+package com.zeotap.main.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.zeotap.main.models.*;
+
+@Controller
+public class RuleEngineController {
+	
+	public ResponseEntity<Node> create_rule(@RequestParam String rule)
+	{
+		return ResponseEntity.ok(null);
+	}
+}

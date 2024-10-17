@@ -1,0 +1,10 @@
+package com.zeotap.main.service.Impl;
+
+import org.springframework.stereotype.Service;
+
+import com.zeotap.main.service.RuleEngineService;
+
+@Service
+public class RuleEngineServiceImpl  implements RuleEngineService{
+
+}

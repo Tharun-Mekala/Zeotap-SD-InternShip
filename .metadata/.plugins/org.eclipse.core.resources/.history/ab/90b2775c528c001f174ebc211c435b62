@@ -1,0 +1,5 @@
+package com.zeotap.main.models;
+
+public class RuleEngineModel {
+
+}

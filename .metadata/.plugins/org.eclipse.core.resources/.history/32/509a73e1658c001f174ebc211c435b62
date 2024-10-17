@@ -1,0 +1,9 @@
+package com.zeotap.main.service;
+
+import com.zeotap.main.entity.RuleEngine;
+
+public interface RuleEngineService {
+	RuleEngine saveRuleEngine(RuleEngine re);
+	RuleEngine getByRule(String rule);
+	List<RuleEngine> getAllRuleEngine();
+}

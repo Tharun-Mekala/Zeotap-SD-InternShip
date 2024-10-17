@@ -1,0 +1,11 @@
+package com.zeotap.main.service.Impl;
+
+import org.springframework.stereotype.Service;
+
+import com.zeotap.main.entity.Node;
+import com.zeotap.main.service.NodeService;
+
+@Service
+public class NodeServiceImpl implements NodeService{
+	
+}
