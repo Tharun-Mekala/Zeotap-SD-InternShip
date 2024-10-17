@@ -1,0 +1,5 @@
+package com.zeotap.main.configuration;
+
+public class WebConfig {
+
+}

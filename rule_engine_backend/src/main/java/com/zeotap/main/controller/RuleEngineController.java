@@ -5,6 +5,7 @@ import java.util.StringTokenizer;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import com.zeotap.main.service.NodeService;
 import com.zeotap.main.service.RuleEngineService;
 
 @Controller
+@CrossOrigin(origins = "http://localhost:3000")
 public class RuleEngineController {
 	
 	private RuleEngineService ruleEngineService;
@@ -33,6 +35,10 @@ public class RuleEngineController {
 	@ResponseBody
 	public Node create_rule(@RequestParam String rule)
 	{
+		RuleEngine re = null;
+		re = ruleEngineService.getByRule(rule);
+		if(re!=null)
+			return re.getRoot();
 		final String Clause = "AND OR WHERE WITH AS HAVING";
 		StringTokenizer tokens = new StringTokenizer(rule, " ()", true);
 		Stack<Node> operator_stack = new Stack<>();
@@ -85,7 +91,7 @@ public class RuleEngineController {
 			node_stack.push(temp);
 		}
 		Node root = node_stack.isEmpty()?null:node_stack.peek();
-		RuleEngine re = new RuleEngine(rule,root);
+		re = new RuleEngine(rule,root);
 		re = ruleEngineService.saveRuleEngine(re);
 		return root;
 	}
@@ -97,15 +103,14 @@ public class RuleEngineController {
 		Node root = null;
 		for(String s:rules)
 		{
-			RuleEngine re = ruleEngineService.getByRule(s);
 			if(root==null)
 			{
 				
-				root=(re!=null)?re.getRoot():create_rule(s);
+				root=create_rule(s);
 			}
 			else
 			{
-				Node newRule = (re!=null)?re.getRoot():create_rule(s);
+				Node newRule = create_rule(s);
 				Node orNode = new Node("operator", "OR");
 				orNode.setLeft(root);
 				orNode.setRight(newRule);
@@ -117,7 +122,7 @@ public class RuleEngineController {
 		return root;
 	}
 	
-	@GetMapping("rule_engine/evaluate_rule")
+	@PostMapping("rule_engine/evaluate_rule")
 	public ResponseEntity<Boolean> evaluate_rule(@RequestBody Rule data)
 	{
 		List<RuleEngine> list = ruleEngineService.getAllRuleEngine();
