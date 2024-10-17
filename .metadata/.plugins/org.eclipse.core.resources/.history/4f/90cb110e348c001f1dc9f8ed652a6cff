@@ -1,0 +1,4 @@
+spring.application.name=rule_engine_backend
+spring.datasource.url=jdbc:postgresql://localhost:5432/cdm?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+spring.datasource.username=postgres
+spring.datasource.password=Chenna@23
