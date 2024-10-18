@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import "./CreateRuleInput.css"; // Import the CSS file for styling
 
 const CreateRuleInput = () => {
   const [ruleString, setRuleString] = useState("");
-  const [node, setNode] = useState(null); // To store the returned Node
-  const [error, setError] = useState(null); // To handle any errors
+  const [node, setNode] = useState(null);   
+  const [error, setError] = useState(null);   
 
   const handleInputChange = (e) => {
     setRuleString(e.target.value);
@@ -24,17 +23,17 @@ const CreateRuleInput = () => {
           }),
         });
 
-        // Check if the response is OK
+          
         if (!response.ok) {
           const errorMessage = await response.text();
           console.error("Error:", errorMessage);
           throw new Error(`Failed to create rule: ${response.status} - ${errorMessage}`);
         }
 
-        const data = await response.json(); // Assuming API returns JSON
-        setNode(data); // Save the returned Node
-        setRuleString(""); // Clear the input field
-        setError(null); // Clear any previous error
+        const data = await response.json();   
+        setNode(data);   
+        setRuleString("");   
+        setError(null);   
       } catch (err) {
         console.error("Error occurred:", err);
         setError(err.message);

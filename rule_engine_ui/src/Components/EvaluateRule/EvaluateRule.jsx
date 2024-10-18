@@ -1,35 +1,34 @@
 import React, { useState } from 'react';
-import './EvaluateRule.css'; // Import the CSS file for styling
-
+   
 const EvaluateRule = () => {
   const [age, setAge] = useState('');
   const [department, setDepartment] = useState('');
   const [salary, setSalary] = useState('');
   const [experience, setExperience] = useState('');
-  const [result, setResult] = useState(null); // To store the evaluation result
-  const [error, setError] = useState(null); // To handle any errors
+  const [result, setResult] = useState(null);   
+  const [error, setError] = useState(null);   
 
   const handleSubmit = async () => {
-    // Validation checks
+      
     if (!age || !department || !salary || !experience) {
       setError('All fields are required');
       return;
     }
 
-    setError(null); // Clear any previous error
+    setError(null);   
 
     try {
       // API call to evaluate rule
       const response = await fetch("http://localhost:8080/rule_engine/evaluate_rule", {
-        method: "POST", // Use POST for sending data
+        method: "POST",   
         headers: {
-          "Content-Type": "application/json", // Send as JSON
+          "Content-Type": "application/json",   
         },
         body: JSON.stringify({
-          age: Number(age), // Convert to Number for the API
-          department, // Keep as string
-          salary: Number(salary), // Convert to Number for the API
-          experience: Number(experience), // Convert to Number for the API
+          age: Number(age),   
+          department,   
+          salary: Number(salary),   
+          experience: Number(experience),   
         }),
       });
 
@@ -37,10 +36,10 @@ const EvaluateRule = () => {
         throw new Error('Failed to evaluate rule');
       }
 
-      const data = await response.json(); // Assuming API returns JSON
-      setResult(data); // Save the evaluation result
+      const data = await response.json();   
+      setResult(data);   
       
-      // Resetting fields after submission
+        
       setAge('');
       setDepartment('');
       setSalary('');
