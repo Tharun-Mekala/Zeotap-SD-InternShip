@@ -4,7 +4,7 @@ import { convertToCelsius } from '../helpers/helpers';
 
 
 
-const API_KEY = "24af0b003f798c70529c0109b6ecc0e9"; // Replace with your API key
+const API_KEY = "Your API KEY"; // Replace with your API key
 const WEATHER_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
 const WeatherFetcher = ({ onDataFetched, cities }) => {
