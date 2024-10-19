@@ -25,7 +25,9 @@ const CreateRuleInput = () => {
 
           
         if (!response.ok) {
-          const errorMessage = await response.text();
+          const errorText = await response.text();
+          const errorJson = JSON.parse(errorText);
+          const errorMessage = errorJson.value;
           console.error("Error:", errorMessage);
           throw new Error(`Failed to create rule: ${response.status} - ${errorMessage}`);
         }

@@ -3,10 +3,10 @@ package com.zeotap.main.controller;
 import java.util.*;
 import java.util.StringTokenizer;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,22 +24,82 @@ public class RuleEngineController {
 	
 	private RuleEngineService ruleEngineService;
 	private NodeService nodeService;
-	
+	private static boolean flag = false;
+	final static String Clause = "AND OR WHERE WITH AS HAVING";
 	public RuleEngineController(RuleEngineService ruleEngineService, NodeService nodeService) {
 		super();
 		this.ruleEngineService = ruleEngineService;
 		this.nodeService = nodeService;
 	}
 	
+	private static boolean validate_rule(String rule)
+	{
+		if(!rule.matches(".*[><=].*"))
+			return false;
+		StringTokenizer tokens = new StringTokenizer(rule, " ()", true);
+		Stack<String> parentheses_stack = new Stack<>();
+		Stack<String> operator_stack = new Stack<>();
+		Stack<String> node_stack = new Stack<>();
+		while(tokens.hasMoreElements())
+		{
+			String s =tokens.nextToken();
+			if(s.equals(" "))
+				continue;
+			else if(s.equals("("))
+				parentheses_stack.push(s);
+			else if(s.equals(")"))
+			{
+				if(parentheses_stack.isEmpty())
+					return false;
+				parentheses_stack.pop();
+				if(!operator_stack.isEmpty())
+				{
+					String temp = operator_stack.pop();
+					node_stack.pop();
+					node_stack.pop();
+					node_stack.push(temp);
+				}
+			}
+			else if(Clause.contains(s))
+			{
+				operator_stack.push(s);
+			}
+			else if(">=<=".contains(s))
+			{
+				node_stack.pop();
+				tokens.nextToken();
+				tokens.nextToken();
+				node_stack.push(s);
+			}
+			else
+				node_stack.push(s);
+			
+		}
+		while(!operator_stack.isEmpty())
+		{
+			String temp  = operator_stack.pop();
+			if(node_stack.size()<2)
+				return false;
+			node_stack.pop();
+			node_stack.pop();
+			node_stack.push(temp);
+		}
+		if(node_stack.size()==1 && parentheses_stack.isEmpty() )
+			return true;
+		return false;
+	}
 	@PostMapping("rule_engine/create_rule")
 	@ResponseBody
-	public Node create_rule(@RequestParam String rule)
-	{
+	public ResponseEntity<Node> create_rule(@RequestParam String rule)
+	{	
+		Node errorNode = new Node("Error", "Invalid input. Please check your data and try again.");
+		if(!flag)
+			if(!validate_rule(rule))
+				return ResponseEntity.badRequest().body(errorNode);
 		RuleEngine re = null;
 		re = ruleEngineService.getByRule(rule);
 		if(re!=null)
-			return re.getRoot();
-		final String Clause = "AND OR WHERE WITH AS HAVING";
+			return ResponseEntity.ok(re.getRoot());
 		StringTokenizer tokens = new StringTokenizer(rule, " ()", true);
 		Stack<Node> operator_stack = new Stack<>();
 		Stack<Node> node_stack = new Stack<>();
@@ -93,33 +153,63 @@ public class RuleEngineController {
 		Node root = node_stack.isEmpty()?null:node_stack.peek();
 		re = new RuleEngine(rule,root);
 		re = ruleEngineService.saveRuleEngine(re);
-		return root;
+		return root==null?ResponseEntity.badRequest().body(errorNode):ResponseEntity.ok(root);
 	}
 	
 	@PostMapping("rule_engine/combine_rules")
 	@ResponseBody
-	public Node combine_rule(@RequestBody List<String> rules)
-	{
-		Node root = null;
-		for(String s:rules)
-		{
-			if(root==null)
-			{
-				
-				root=create_rule(s);
-			}
-			else
-			{
-				Node newRule = create_rule(s);
-				Node orNode = new Node("operator", "OR");
-				orNode.setLeft(root);
-				orNode.setRight(newRule);
-				nodeService.saveNode(orNode);
-	            root = orNode;
-			}
-			
-		}
-		return root;
+	public ResponseEntity<Node>  combine_rule(@RequestBody List<String> rules) {
+	    Node root = null;
+	    Node errorNode = new Node("Error", "Invalid input. Please check your data and try again.");
+	    
+	    for(String rule:rules)
+	    {
+	    	if(!validate_rule(rule))
+	    	{
+				return ResponseEntity.badRequest().body(errorNode);
+	    	}
+	    }
+	    flag=true;
+	    for (String rule : rules) 
+	    {
+	    	
+	        ResponseEntity<Node> responseEntity = create_rule(rule);
+	        if (responseEntity.getStatusCode() == HttpStatus.OK) 
+	        {
+	            Node newRule = responseEntity.getBody();
+	            if (root == null) 
+	                root = newRule; 
+	            else 
+	            {
+	                Node orNode = new Node("operator", "OR");
+	                orNode.setLeft(root);
+	                orNode.setRight(newRule);
+	                nodeService.saveNode(orNode);
+	                root = orNode;
+	            }
+	        } 
+	        else if (responseEntity.getStatusCode() == HttpStatus.CONFLICT) 
+	        {
+	            Node existingRule = responseEntity.getBody();
+	            if (root == null)
+	                root = existingRule;
+	            else 
+	            {
+	                Node orNode = new Node("operator", "OR");
+	                orNode.setLeft(root);
+	                orNode.setRight(existingRule);
+	                nodeService.saveNode(orNode);
+	                root = orNode; 
+	            }
+	        } 
+	        else 
+	        {
+	        	flag=false;
+	           return ResponseEntity.badRequest().body(errorNode);
+	        }
+	    }
+	    flag=false;
+		return root==null?ResponseEntity.badRequest().body(errorNode):ResponseEntity.ok(root);
 	}
 	
 	@PostMapping("rule_engine/evaluate_rule")
