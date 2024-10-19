@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
- 
+
 
 const CombineRule = () => {
-  const [rules, setRules] = useState(['']);   
-  const [node, setNode] = useState(null);   
-  const [error, setError] = useState(null);   
+  const [rules, setRules] = useState(['']);
+  const [node, setNode] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleInputChange = (index, value) => {
     const newRules = [...rules];
-    newRules[index] = value;   
+    newRules[index] = value;
     setRules(newRules);
   };
 
   const handleAddRule = () => {
-    setRules([...rules, '']);   
+    setRules([...rules, '']);
   };
 
   const handleDeleteRule = (index) => {
-    const newRules = rules.filter((_, i) => i !== index);   
+    const newRules = rules.filter((_, i) => i !== index);
     setRules(newRules);
   };
 
@@ -29,26 +29,26 @@ const CombineRule = () => {
       setError('Please fill in all rule fields.');
       return;
     }
-    setError(null);   
+    setError(null);
 
     try {
       // API call to combine rules
       const response = await fetch("http://localhost:8080/rule_engine/combine_rules", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", 
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(rules), 
+        body: JSON.stringify(rules),
       });
 
       if (!response.ok) {
         throw new Error('Failed to combine rules');
       }
 
-      const data = await response.json();   
-      setNode(data);   
+      const data = await response.json();
+      setNode(data);
       setRules([''])
-      console.log('Combined Node:', data);   
+      console.log('Combined Node:', data);
     } catch (err) {
       setError(err.message);
       setNode(null);

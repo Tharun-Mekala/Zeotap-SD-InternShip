@@ -18,8 +18,8 @@ const WeatherFetcher = ({ onDataFetched, cities }) => {
           temp: convertToCelsius(data.main.temp),
           feels_like: convertToCelsius(data.main.feels_like),
           time: new Date(data.dt * 1000).toLocaleTimeString(),
-          humidity:data.main.humidity,
-          wind_speed:data.wind.speed,
+          humidity: data.main.humidity,
+          wind_speed: data.wind.speed,
         }))
     );
 
@@ -30,7 +30,7 @@ const WeatherFetcher = ({ onDataFetched, cities }) => {
 
   useEffect(() => {
     fetchWeatherData();
-    const intervalId = setInterval(fetchWeatherData, 300000); 
+    const intervalId = setInterval(fetchWeatherData, 300000);
     return () => clearInterval(intervalId);
   }, []);
 

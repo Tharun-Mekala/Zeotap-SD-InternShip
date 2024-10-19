@@ -9,7 +9,7 @@ const AlertChecker = ({ weatherData, onAlert }) => {
     });
   }, [weatherData]);
 
-  return null; 
+  return null;
 };
 
 export default AlertChecker;

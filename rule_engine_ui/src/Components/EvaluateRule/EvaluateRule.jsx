@@ -1,34 +1,34 @@
 import React, { useState } from 'react';
-   
+
 const EvaluateRule = () => {
   const [age, setAge] = useState('');
   const [department, setDepartment] = useState('');
   const [salary, setSalary] = useState('');
   const [experience, setExperience] = useState('');
-  const [result, setResult] = useState(null);   
-  const [error, setError] = useState(null);   
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async () => {
-      
+
     if (!age || !department || !salary || !experience) {
       setError('All fields are required');
       return;
     }
 
-    setError(null);   
+    setError(null);
 
     try {
       // API call to evaluate rule
       const response = await fetch("http://localhost:8080/rule_engine/evaluate_rule", {
-        method: "POST",   
+        method: "POST",
         headers: {
-          "Content-Type": "application/json",   
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          age: Number(age),   
-          department,   
-          salary: Number(salary),   
-          experience: Number(experience),   
+          age: Number(age),
+          department,
+          salary: Number(salary),
+          experience: Number(experience),
         }),
       });
 
@@ -36,15 +36,15 @@ const EvaluateRule = () => {
         throw new Error('Failed to evaluate rule');
       }
 
-      const data = await response.json();   
-      setResult(data);   
-      
-        
+      const data = await response.json();
+      setResult(data);
+
+
       setAge('');
       setDepartment('');
       setSalary('');
       setExperience('');
-      
+
     } catch (err) {
       setError(err.message);
       setResult(null);

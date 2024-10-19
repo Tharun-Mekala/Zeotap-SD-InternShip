@@ -158,7 +158,7 @@ public class RuleEngineController {
 	
 	@PostMapping("rule_engine/combine_rules")
 	@ResponseBody
-	public ResponseEntity<Node>  combine_rule(@RequestBody List<String> rules) {
+	public ResponseEntity<Node> combine_rule(@RequestBody List<String> rules) {
 	    Node root = null;
 	    Node errorNode = new Node("Error", "Invalid input. Please check your data and try again.");
 	    

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 
 const CreateRuleInput = () => {
   const [ruleString, setRuleString] = useState("");
-  const [node, setNode] = useState(null);   
-  const [error, setError] = useState(null);   
+  const [node, setNode] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleInputChange = (e) => {
     setRuleString(e.target.value);
@@ -23,7 +23,7 @@ const CreateRuleInput = () => {
           }),
         });
 
-          
+
         if (!response.ok) {
           const errorText = await response.text();
           const errorJson = JSON.parse(errorText);
@@ -32,10 +32,10 @@ const CreateRuleInput = () => {
           throw new Error(`Failed to create rule: ${response.status} - ${errorMessage}`);
         }
 
-        const data = await response.json();   
-        setNode(data);   
-        setRuleString("");   
-        setError(null);   
+        const data = await response.json();
+        setNode(data);
+        setRuleString("");
+        setError(null);
       } catch (err) {
         console.error("Error occurred:", err);
         setError(err.message);

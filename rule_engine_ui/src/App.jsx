@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import './App.css';
-import CreateRuleInput from "./Components/CreateRuleInput/CreateRuleInput"; 
-import CombineRule from "./Components/CombineRule/CombineRule"; 
-import EvaluateRule from "./Components/EvaluateRule/EvaluateRule"; 
+import CreateRuleInput from "./Components/CreateRuleInput/CreateRuleInput";
+import CombineRule from "./Components/CombineRule/CombineRule";
+import EvaluateRule from "./Components/EvaluateRule/EvaluateRule";
 
 const App = () => {
-  const [activeComponent, setActiveComponent] = useState(null); 
+  const [activeComponent, setActiveComponent] = useState(null);
 
   const renderComponent = () => {
     switch (activeComponent) {
